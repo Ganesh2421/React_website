@@ -221,8 +221,6 @@ class App extends Component {
   componentDidMount() {
     console.log(this.state.data);
     window.setInterval(() => {
-      getMyLocation();
-      v = JSON.parse(localStorage.getItem('result'));
 
       fetch('https://sensoryt.herokuapp.com/api/data/past/7-day')
         .then(res => res.json())
@@ -246,22 +244,24 @@ class App extends Component {
         load_curr:true
 
       })});
-      weather.getHourlyWeatherByPosition(v)
+      
+
+    }, 300000);
+
+  }
+
+  render(){
+          getMyLocation();
+      v = JSON.parse(localStorage.getItem('result'));
+
+weather.getHourlyWeatherByPosition(v)
         .then(json => {this.setState({
         weather_fore: json
       })});
       weather.getCurrentWeatherByPosition(v)
         .then(json => {this.setState({
         weather_curr: json
-      })});
-
-    }, 5000);
-
-  }
-
-  render(){
-    //var {loaded, data}
-    const goto_hrs=()=>{
+      })});    const goto_hrs=()=>{
       this.hrs_sec.current.scrollIntoView();
     };
     const goto_week=()=>{
@@ -269,6 +269,7 @@ class App extends Component {
 
     };
     
+      console.log(this.state.weather_fore);
 
     if(!(this.state.load_week && this.state.load_hrs && this.state.load_curr)){
       console.log("Loading");
@@ -278,7 +279,6 @@ class App extends Component {
     }
     else{
       var t = this.state.data_curr.data.slice(0,1).waterlevel;
-      console.log(t);
       return (
       <div className="App">
       <h1 style={{ textAlign: "center" }}>Dashboard</h1>
